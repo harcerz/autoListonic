@@ -1,0 +1,430 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 450px;
+  min-height: 500px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.container {
+  background: white;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.logout-btn {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+#content {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.screen {
+  display: block;
+}
+
+.screen.hidden {
+  display: none;
+}
+
+/* Login Screen */
+#login-screen h2 {
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.error-message {
+  background: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.info-box {
+  background: #f5f5f5;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.info-box p {
+  color: #666;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.info-box a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.info-box a:hover {
+  text-decoration: underline;
+}
+
+/* Loading Screen */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 40px auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#loading-text {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Ingredients Screen */
+.recipe-title {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #667eea;
+}
+
+.recipe-title h2 {
+  font-size: 15px;
+  color: #333;
+  font-weight: 600;
+}
+
+.ingredients-section {
+  margin-bottom: 20px;
+}
+
+.ingredients-section h3 {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.ingredients-list {
+  max-height: 180px;
+  overflow-y: auto;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #fafafa;
+}
+
+.ingredient-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.ingredient-item:hover {
+  background: #f0f0f0;
+}
+
+.ingredient-item input[type="checkbox"] {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+.ingredient-item label {
+  flex-grow: 1;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ingredient-name {
+  flex-grow: 1;
+}
+
+.ingredient-quantity {
+  color: #666;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.ingredients-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.count-badge {
+  background: #e8eaf6;
+  color: #667eea;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* List Selection */
+.list-selection {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.list-selection h3 {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+  font-weight: 600;
+}
+
+.list-options {
+  margin-bottom: 10px;
+}
+
+.list-select {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+#new-list-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.list-select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.new-list-form {
+  margin-top: 10px;
+}
+
+.new-list-form input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #667eea;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+/* Buttons */
+.btn-primary, .btn-secondary {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-secondary:hover {
+  background: #d0d0d0;
+}
+
+.btn-large {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Success Screen */
+.success-message {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.success-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.success-message h2 {
+  color: #2e7d32;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.success-message p {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.success-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.success-actions button {
+  min-width: 110px;
+  padding: 10px 15px;
+}
+
+/* Message Screen */
+.message {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.message p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.message small {
+  color: #666;
+  font-size: 13px;
+}
+
+/* Footer */
+footer {
+  background: #f5f5f5;
+  padding: 10px 20px;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+}
+
+footer small {
+  color: #666;
+  font-size: 11px;
+}
+
+.hidden {
+  display: none !important;
+}

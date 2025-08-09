@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>AutoListonic</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🛒 AutoListonic</h1>
+      <div id="user-info" class="user-info hidden">
+        <span id="user-email"></span>
+        <button id="logout-btn" class="logout-btn">Wyloguj</button>
+      </div>
+    </header>
+    
+    <div id="content">
+      <!-- Ekran logowania -->
+      <div id="login-screen" class="screen">
+        <h2>Zaloguj się do Listonic</h2>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required placeholder="twoj@email.com">
+          </div>
+          <div class="form-group">
+            <label for="password">Hasło:</label>
+            <input type="password" id="password" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn-primary">Zaloguj się</button>
+          <div id="login-error" class="error-message hidden"></div>
+        </form>
+        <div class="info-box">
+          <p>💡 Nie masz konta?</p>
+          <a href="https://www.listonic.com/register" target="_blank">Zarejestruj się w Listonic</a>
+        </div>
+      </div>
+      
+      <!-- Ekran ładowania -->
+      <div id="loading-screen" class="screen hidden">
+        <div class="spinner"></div>
+        <p id="loading-text">Szukam składników...</p>
+      </div>
+      
+      <!-- Ekran braku składników -->
+      <div id="no-ingredients-screen" class="screen hidden">
+        <div class="message">
+          <p>😕 Nie znaleziono składników na tej stronie</p>
+          <small>Upewnij się, że jesteś na stronie z przepisem</small>
+        </div>
+      </div>
+      
+      <!-- Ekran wyboru składników -->
+      <div id="ingredients-screen" class="screen hidden">
+        <div class="recipe-title">
+          <h2 id="recipe-name"></h2>
+        </div>
+        
+        <div class="ingredients-section">
+          <h3>Składniki do dodania:</h3>
+          <div id="ingredients-checkboxes" class="ingredients-list"></div>
+          <div class="ingredients-actions">
+            <button id="select-all" class="btn-secondary">Zaznacz wszystkie</button>
+            <span id="selected-count" class="count-badge">0 wybranych</span>
+          </div>
+        </div>
+        
+        <div class="list-selection">
+          <div class="list-header">
+            <h3>Wybierz listę:</h3>
+            <button id="new-list-btn" class="btn-secondary btn-small">+ Nowa lista</button>
+          </div>
+          <div class="list-options">
+            <select id="list-select" class="list-select">
+              <option value="">Ładowanie list...</option>
+            </select>
+          </div>
+          
+          <div id="new-list-form" class="new-list-form hidden">
+            <input type="text" id="new-list-name" placeholder="Nazwa nowej listy...">
+            <div class="form-actions">
+              <button id="create-list-btn" class="btn-primary">Utwórz</button>
+              <button id="cancel-new-list" class="btn-secondary">Anuluj</button>
+            </div>
+          </div>
+        </div>
+        
+        <button id="add-to-listonic" class="btn-primary btn-large">
+          Dodaj do Listonic
+        </button>
+      </div>
+      
+      <!-- Ekran sukcesu -->
+      <div id="success-screen" class="screen hidden">
+        <div class="success-message">
+          <div class="success-icon">✅</div>
+          <h2>Składniki zostały dodane!</h2>
+          <p id="success-details"></p>
+          <div class="success-actions">
+            <button id="open-listonic" class="btn-primary">Otwórz Listonic</button>
+            <button id="add-more" class="btn-secondary">Dodaj więcej</button>
+            <button id="close-window" class="btn-secondary">Zamknij</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      <small>Obsługiwane: Kwestia Smaku, Ania Gotuje i inne</small>
+    </footer>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

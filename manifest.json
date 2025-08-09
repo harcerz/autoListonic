@@ -1,0 +1,60 @@
+{
+  "manifest_version": 3,
+  "name": "AutoListonic",
+  "version": "2.0.0",
+  "description": "Automatycznie dodaj składniki z przepisów do swoich list w Listonic",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "identity",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://kwestiasmaku.com/*",
+    "https://www.kwestiasmaku.com/*",
+    "https://aniagotuje.pl/*",
+    "https://www.aniagotuje.pl/*",
+    "https://przyslijprzepis.pl/*",
+    "https://www.przyslijprzepis.pl/*",
+    "https://kuchnia-domowa.pl/*",
+    "https://www.kuchnia-domowa.pl/*",
+    "https://mojegotowanie.pl/*",
+    "https://www.mojegotowanie.pl/*",
+    "https://api.listonic.com/*",
+    "https://app.listonic.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.ico",
+      "48": "icon.ico",
+      "128": "icon.ico"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://kwestiasmaku.com/*",
+        "https://www.kwestiasmaku.com/*",
+        "https://aniagotuje.pl/*",
+        "https://www.aniagotuje.pl/*",
+        "https://przyslijprzepis.pl/*",
+        "https://www.przyslijprzepis.pl/*",
+        "https://kuchnia-domowa.pl/*",
+        "https://www.kuchnia-domowa.pl/*",
+        "https://mojegotowanie.pl/*",
+        "https://www.mojegotowanie.pl/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon.ico",
+    "48": "icon.ico",
+    "128": "icon.ico"
+  }
+}
