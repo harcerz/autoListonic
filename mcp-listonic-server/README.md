@@ -2,6 +2,16 @@
 
 MCP (Model Context Protocol) server for Listonic integration. Control your shopping lists with AI through Claude Desktop or other MCP-compatible tools.
 
+## Important Note
+
+⚠️ **Direct login via API is currently not working due to API changes.** The Listonic API now returns "Unauthorized token. Token is invalid" for direct login attempts. 
+
+### Alternative Setup:
+1. Install the AutoListonic Chrome extension
+2. Log in to app.listonic.com in your browser
+3. The Chrome extension will capture your authentication token
+4. You can then use the MCP server with the captured token (implementation pending)
+
 ## Features
 
 - 🔐 Login to Listonic account
@@ -39,7 +49,7 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "listonic": {
       "command": "node",
-      "args": ["C:/path/to/mcp-listonic-server/src/index.js"],
+      "args": ["C:/Projekty/SYCHPL/listonic/mcp-listonic-server/src/index.js"],
       "env": {
         "LISTONIC_EMAIL": "your-email@example.com",
         "LISTONIC_PASSWORD": "your-password"
@@ -48,6 +58,8 @@ Add to your Claude Desktop configuration file:
   }
 }
 ```
+
+**Note:** Replace the path in `args` with the actual path to your MCP server installation.
 
 ## Available Tools
 

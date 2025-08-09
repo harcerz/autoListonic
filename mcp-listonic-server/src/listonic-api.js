@@ -41,41 +41,71 @@ export class ListonicAPI {
   }
 
   async login(email, password) {
+    console.error('Login attempt for:', email);
+    console.error('Password length:', password ? password.length : 0);
+    
     const params = new URLSearchParams({
       provider: 'password',
       autoMerge: '1',
       autoDestruct: '1'
     });
 
-    const response = await fetch(`${LISTONIC_API_BASE}/loginextended?${params}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-        'clientauthorization': 'Bearer bGlzdG9uaWN2MjpmamRmc29qOTg3NGpkZmhqa2gzNGpraGZmZGZmZg=='
-      },
-      body: new URLSearchParams({
-        'username': email,
-        'password': password,
-        'client_id': 'listonicv2',
-        'redirect_uri': 'https://app.listonic.com/',
-        'client_secret': 'fjdfsoj9874jdfhjk'
-      })
+    const loginUrl = `${LISTONIC_API_BASE}/loginextended?${params}`;
+    const loginBody = new URLSearchParams({
+      'username': email,
+      'password': password,
+      'client_id': 'listonicv2',
+      'redirect_uri': 'https://app.listonic.com/',
+      'client_secret': 'fjdfsoj9874jdfhjk'
     });
 
-    if (!response.ok) {
-      throw new Error('Login failed: Invalid credentials');
+    console.error('Login URL:', loginUrl);
+    console.error('Login body:', loginBody.toString());
+    console.error('Request headers:', {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'clientauthorization': 'Bearer bGlzdG9uaWN2MjpmamRmc29qOTg3NGpkZmhqa2gzNGpraGZmZGZmZg=='
+    });
+    
+    try {
+      const response = await fetch(loginUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json',
+          'clientauthorization': 'Bearer bGlzdG9uaWN2MjpmamRmc29qOTg3NGpkZmhqa2gzNGpraGZmZGZmZg==',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Origin': 'https://app.listonic.com',
+          'Referer': 'https://app.listonic.com/'
+        },
+        body: loginBody
+      });
+
+      console.error('Login response status:', response.status);
+      console.error('Response headers:', Object.fromEntries(response.headers.entries()));
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Login error response:', errorText);
+        throw new Error(`Login failed: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.error('Login successful, response data keys:', Object.keys(data));
+      console.error('Token received:', data.access_token ? 'Yes' : 'No');
+      
+      this.token = data.access_token;
+      this.refreshToken = data.refresh_token;
+      this.tokenExpiry = Date.now() + (data.expires_in || 86400) * 1000;
+
+      return {
+        success: true,
+        user: await this.getUserInfo()
+      };
+    } catch (error) {
+      console.error('Login error details:', error);
+      throw error;
     }
-
-    const data = await response.json();
-    this.token = data.access_token;
-    this.refreshToken = data.refresh_token;
-    this.tokenExpiry = Date.now() + (data.expires_in || 86400) * 1000;
-
-    return {
-      success: true,
-      user: await this.getUserInfo()
-    };
   }
 
   async makeRequest(endpoint, method = 'GET', body = null) {
@@ -128,7 +158,10 @@ export class ListonicAPI {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'clientauthorization': 'Bearer bGlzdG9uaWN2MjpmamRmc29qOTg3NGpkZmhqa2gzNGpraGZmZGZmZg=='
+        'clientauthorization': 'Bearer bGlzdG9uaWN2MjpmamRmc29qOTg3NGpkZmhqa2gzNGpraGZmZGZmZg==',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Origin': 'https://app.listonic.com',
+        'Referer': 'https://app.listonic.com/'
       },
       body: new URLSearchParams({
         'refresh_token': this.refreshToken,

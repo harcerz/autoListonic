@@ -1,6 +1,11 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { 
+  CallToolRequestSchema,
+  ListToolsRequestSchema 
+} from '@modelcontextprotocol/sdk/types.js';
 import { ListonicAPI } from './listonic-api.js';
+import { ChromeTokenBridge } from './chrome-token-bridge.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -18,23 +23,55 @@ const server = new Server(
   }
 );
 
-const api = new ListonicAPI();
+const bridge = new ChromeTokenBridge();
+const api = bridge.getAPI();
 let isAuthenticated = false;
 
-// Auto-login if credentials are in environment
-if (process.env.LISTONIC_EMAIL && process.env.LISTONIC_PASSWORD) {
-  api.login(process.env.LISTONIC_EMAIL, process.env.LISTONIC_PASSWORD)
-    .then(() => {
+// Auto-login function
+async function performAutoLogin() {
+  // First try to load saved tokens
+  console.error('Checking for saved tokens...');
+  if (await bridge.loadSavedTokens()) {
+    isAuthenticated = true;
+    console.error('Loaded saved tokens successfully');
+    return;
+  }
+  
+  // If no saved tokens, try direct login (currently not working)
+  if (process.env.LISTONIC_EMAIL && process.env.LISTONIC_PASSWORD) {
+    try {
+      console.error('Attempting auto-login...');
+      await api.login(process.env.LISTONIC_EMAIL, process.env.LISTONIC_PASSWORD);
       isAuthenticated = true;
-      console.error('Auto-login successful');
-    })
-    .catch(err => {
+      console.error('Auto-login successful for:', process.env.LISTONIC_EMAIL);
+      await bridge.saveCurrentTokens();
+    } catch (err) {
       console.error('Auto-login failed:', err.message);
-    });
+      console.error('\n⚠️  Direct API login is currently not working.');
+      console.error('Please use the Chrome extension to log in and extract tokens.');
+      console.error('See chrome-token-bridge.js for instructions.');
+    }
+  } else {
+    console.error('No credentials found in environment variables');
+    console.error('\n⚠️  Direct API login is currently not working.');
+    console.error('Please use the Chrome extension to log in and extract tokens.');
+    console.error('See chrome-token-bridge.js for instructions.');
+  }
 }
 
-// Tool: Login to Listonic
-server.setRequestHandler('tools/call', async (request) => {
+// Debug environment
+console.error('MCP Listonic Server starting...');
+console.error('Environment check:', {
+  hasEmail: !!process.env.LISTONIC_EMAIL,
+  hasPassword: !!process.env.LISTONIC_PASSWORD,
+  email: process.env.LISTONIC_EMAIL ? process.env.LISTONIC_EMAIL.substring(0, 3) + '***' : 'not set'
+});
+
+// Perform auto-login on startup
+await performAutoLogin();
+
+// Tool handler
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
 
   try {
@@ -42,12 +79,29 @@ server.setRequestHandler('tools/call', async (request) => {
       case 'listonic_login':
         const loginResult = await api.login(args.email, args.password);
         isAuthenticated = true;
+        await bridge.saveCurrentTokens();
         return {
           content: [{
             type: 'text',
             text: `Successfully logged in as ${loginResult.user.email}`
           }]
         };
+
+      case 'listonic_set_token':
+        await bridge.setTokenFromChrome(args.token, args.refreshToken, args.tokenExpiry);
+        isAuthenticated = true;
+        try {
+          const userInfo = await api.getUserInfo();
+          return {
+            content: [{
+              type: 'text',
+              text: `Token set successfully. Logged in as: ${userInfo.email}`
+            }]
+          };
+        } catch (error) {
+          isAuthenticated = false;
+          throw new Error('Invalid token provided');
+        }
 
       case 'listonic_get_lists':
         if (!isAuthenticated) {
@@ -136,7 +190,7 @@ server.setRequestHandler('tools/call', async (request) => {
 });
 
 // List available tools
-server.setRequestHandler('tools/list', async () => {
+server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
       {
@@ -155,6 +209,28 @@ server.setRequestHandler('tools/list', async () => {
             }
           },
           required: ['email', 'password']
+        }
+      },
+      {
+        name: 'listonic_set_token',
+        description: 'Set authentication token manually (extracted from Chrome extension)',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            token: {
+              type: 'string',
+              description: 'The access token from Chrome extension'
+            },
+            refreshToken: {
+              type: 'string',
+              description: 'The refresh token (optional)'
+            },
+            tokenExpiry: {
+              type: 'number',
+              description: 'Token expiry timestamp in milliseconds (optional)'
+            }
+          },
+          required: ['token']
         }
       },
       {
