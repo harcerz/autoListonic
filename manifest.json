@@ -26,9 +26,9 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icon.ico",
-      "48": "icon.ico",
-      "128": "icon.ico"
+      "16": "logo.png",
+      "48": "logo.png",
+      "128": "logo.png"
     }
   },
   "content_scripts": [
@@ -53,8 +53,8 @@
     "service_worker": "background.js"
   },
   "icons": {
-    "16": "icon.ico",
-    "48": "icon.ico",
-    "128": "icon.ico"
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
   }
 }

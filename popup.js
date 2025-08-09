@@ -143,7 +143,12 @@ async function loadIngredients() {
     
     if (!supportedDomains.includes(hostname)) {
       console.error('Unsupported domain:', hostname);
-      showNoIngredientsWithMessage(`Strona ${hostname} nie jest obsługiwana`);
+      // Specjalne komunikaty dla znanych stron
+      if (hostname === 'app.listonic.com') {
+        showNoIngredientsWithMessage('To jest aplikacja Listonic. Otwórz stronę z przepisem aby dodać składniki.');
+      } else {
+        showNoIngredientsWithMessage(`Strona ${hostname} nie jest obsługiwana. Otwórz przepis na: Kwestia Smaku, Ania Gotuje, itp.`);
+      }
       return;
     }
     

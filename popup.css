@@ -425,6 +425,16 @@ footer small {
   font-size: 11px;
 }
 
+footer a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
 .hidden {
   display: none !important;
 }

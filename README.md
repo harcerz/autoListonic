@@ -21,11 +21,23 @@ Rozszerzenie Chrome, które automatycznie wyciąga składniki z przepisów kulin
 
 ## Instalacja
 
+### Ze sklepu Chrome (wkrótce)
+Rozszerzenie będzie dostępne w Chrome Web Store.
+
+### Instalacja deweloperska
 1. Sklonuj repozytorium lub pobierz pliki
 2. Otwórz Chrome i przejdź do `chrome://extensions/`
 3. Włącz "Tryb deweloperski" w prawym górnym rogu
 4. Kliknij "Załaduj rozpakowane"
 5. Wybierz folder z rozszerzeniem
+
+### Budowanie wersji produkcyjnej
+```bash
+npm install
+npm run build
+```
+
+Plik ZIP gotowy do wysłania do Chrome Web Store znajdziesz w folderze `dist/`.
 
 ## Użycie
 

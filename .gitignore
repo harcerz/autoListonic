@@ -19,3 +19,9 @@ Thumbs.db
 # Build files
 dist/
 build/
+
+# Package files
+package-lock.json
+
+# Old icon
+icon.ico
